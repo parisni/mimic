@@ -7,7 +7,7 @@ mimic3/ESBL/*
 mimic3/VENTI/*
 !mimic3/VENTI/sql
 !mimic3/VENTI/README.md
-mimic3/doc
+mimic3/doc/*.pdf
 mimic3/CHOCO/*
 !mimic3/CHOCO/sql
 !mimic3/CHOCO/README.md
