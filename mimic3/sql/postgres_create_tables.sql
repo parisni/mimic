@@ -169,6 +169,10 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE TRIGGER insert_chartevents_trigger
+    BEFORE INSERT ON chartevents
+    FOR EACH ROW EXECUTE PROCEDURE chartevents_insert_trigger();
+
 -- Example command for importing from a CSV to a table
 COPY MIMICIII.CHARTEVENTS 
 FROM '/home/natus/Projets/mimic/mimic3/csv/CHARTEVENTS_DATA_TABLE.csv' 
