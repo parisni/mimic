@@ -8,5 +8,5 @@ PB :
     - chercher dans les courriers ?
      - à corréler avec la bonne infection microbio dans la bdd, travail manuel ?
     - déduire de l'antibiogramme des infection à enterobacterie
-
+[Tribute2ckouatchet](https://www.youtube.com/watch?v=UXT6StVFBzs)
 
