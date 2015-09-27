@@ -3,11 +3,14 @@ v3.0
 mimic3/csv
 mimic3/ESBL/*
 !mimic3/ESBL/sql
+!mimic3/ESBL/README.md
 mimic3/VENTI/*
 !mimic3/VENTI/sql
+!mimic3/VENTI/README.md
 mimic3/doc
 mimic3/CHOCO/*
 !mimic3/CHOCO/sql
+!mimic3/CHOCO/README.md
 mimic3/csv
 mimic3/R
 mimic2
