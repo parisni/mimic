@@ -17,6 +17,7 @@ chunck <- function(x, n){
 		tmp = tmp +  x[i]
 		if(tmp >= m){
 			ind = ind + 1;
+			print(sprintf("[%s-%s[",mini,names(x[i])))
 		 	create = paste0( c(create,printChartevent(ind,mini,names(x[i]))),collapse="\n")
 		 	trigg = paste0( c(trigg,printTriggerIn(ind,mini,names(x[i]))),collapse="\n")
 		 	indexes = paste0( c(indexes,printIndexes(ind)),collapse="\n")
