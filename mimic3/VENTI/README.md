@@ -47,3 +47,17 @@ Les variables recueillies seraient (à rediscuter) à première vue :
 -Défaillance respiratoire : durée de ventilation mécanique, timing d’initiation et de fin
 -Défaillance rénale : timing de la première et la dernière séance d’épuration extrarénale, diurèse (à J1, J2, J3 à préciser), créatinine (idem la date est à préciser)
  
+----------------
+
+Venti artificielle et catécolamines
+- hors pneumonie
+- prowese
+
+
+-----
+sepsis grave : 
+    - code icd9 + catécholamine
+
+
+- PANCARTE :
+    - APR et tenon
