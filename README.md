@@ -49,7 +49,7 @@ sql modified from various repos
 
 ```
 
-## Decision
+## Decision about partitionning (see mimic3/R/create_partitionning_chartevents.R)
 
 ```
 [1] "[1-161["
@@ -60,5 +60,6 @@ sql modified from various repos
 [6] "[3338-3723["
 [7] "[3723-8523["
 [8] "[8523-220074["
-[9] "[220074-228445]"
+[9] "[220074-223769["
+[10] "[223769-228445["
 ```

@@ -1,9 +1,26 @@
-#@ahthor parisni
 #splits chartevents ids in x groups to be partitionned equaly
-require(data.table)
-x <- fread("/tmp/itemid.csv") #SELECT itemid FROM chartevents
+#@ahthor parisni
+library(RPostgreSQL)
+
+#
+# Connect to the database
+#
+dbname <- "mimic"
+user <- "postgres"
+password <- gsub("^.*:","", scan("~/.pgpass",what="")[1])
+host <- "localhost"
+con <- dbConnect(dbDriver("PostgreSQL"), user=user,
+		   password=password, dbname=dbname, host=host)
+#
+#
+#
+
+x <- dbGetQuery(con,"SELECT itemid FROM mimiciii.chartevents;")
+dbDisconnect(con)
+
 c <- table(x)
 d <- c[as.character(sort(as.integer(names(c))))]
+rm(c)
 chunck <- function(x, n){
 	l <- length(x)
 	m <- sum(x) / n
@@ -24,10 +41,18 @@ chunck <- function(x, n){
 			mini <- (names(x[i]))
 			tmp <- 0
 		}
+		if(i==l){
+			ind = ind + 1;
+			maxi <- as.character(as.integer(names(x[i])) +1)
+			print(sprintf("[%s-%s[",mini,maxi))
+		 	create = paste0( c(create,printChartevent(ind,mini,maxi)),collapse="\n")
+		 	trigg = paste0( c(trigg,printTriggerIn(ind,mini,maxi)),collapse="\n")
+		 	indexes = paste0( c(indexes,printIndexes(ind)),collapse="\n")
+		}
 	}
-	cat(create)
-	cat(printTrigger(trigg))
-	cat(indexes)
+	cat(create,file="chartevents_partitioned.sql")
+	cat(printTrigger(trigg),file="chartevents_partitioned.sql",append=T)
+	cat(indexes,file="chartevents_partitioned.sql",append=T)
 }
 printChartevent<- function(ind, mi, ma){
 sprintf("CREATE TABLE chartevents_%d ( CHECK ( itemid >= %s  AND itemid < %s )) INHERITS (chartevents);",ind, mi, ma)
@@ -51,7 +76,7 @@ BEGIN
 
 %s
 	ELSE
-		INSERT INTO chartevents_null VALUES (NEW.*);
+RAISE EXCEPTION 'Itemid out of range.  Fix the chartevents_insert_trigger() function!';
        END IF;
 RETURN NULL;
 END;
@@ -88,4 +113,5 @@ CREATE INDEX CHARTEVENTS_%d_idx04
   ON MIMICIII.CHARTEVENTS_%d (CGID) WITH (FILLFACTOR=100);
 ",ind,ind,ind,ind,ind,ind,ind,ind,ind,ind,ind,ind,ind)
 }
+
 chunck(d, 10)

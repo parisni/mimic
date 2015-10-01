@@ -1,3 +1,5 @@
+#Supposed to auto generate mimic script, auto recognize fields types
+#@auttor parisni
 require(data.table)
 #setwd("/tmp/mimic/")
 transformClass <- function(vect,name){
