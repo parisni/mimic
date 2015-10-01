@@ -22,6 +22,7 @@ c <- table(x)
 d <- c[as.character(sort(as.integer(names(c))))]
 rm(c)
 chunck <- function(x, n){
+	file <- sprintf("chartevents_partitioned_%d.sql",n)
 	l <- length(x)
 	m <- sum(x) / n
 	tmp <- 0
@@ -50,9 +51,9 @@ chunck <- function(x, n){
 		 	indexes = paste0( c(indexes,printIndexes(ind)),collapse="\n")
 		}
 	}
-	cat(create,file="chartevents_partitioned.sql")
-	cat(printTrigger(trigg),file="chartevents_partitioned.sql",append=T)
-	cat(indexes,file="chartevents_partitioned.sql",append=T)
+	cat(create,file=file)
+	cat(printTrigger(trigg),file=file,append=T)
+	cat(indexes,file=file,append=T)
 }
 printChartevent<- function(ind, mi, ma){
 sprintf("CREATE TABLE chartevents_%d ( CHECK ( itemid >= %s  AND itemid < %s )) INHERITS (chartevents);",ind, mi, ma)
@@ -114,4 +115,4 @@ CREATE INDEX CHARTEVENTS_%d_idx04
 ",ind,ind,ind,ind,ind,ind,ind,ind,ind,ind,ind,ind,ind)
 }
 
-chunck(d, 10)
+chunck(d, 100)
