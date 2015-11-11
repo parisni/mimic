@@ -12,5 +12,5 @@ mimic3/CHOCO/*
 !mimic3/CHOCO/sql
 !mimic3/CHOCO/README.md
 mimic3/csv
-mimic3/R
+!mimic3/R
 mimic2

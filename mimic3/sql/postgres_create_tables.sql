@@ -124,45 +124,34 @@ COPY MIMICIII.CAREGIVERS
    ) ;
 
 -- PARTITIONNING
-CREATE TABLE chartevents_1 (
-	    CHECK ( itemid >= 1  AND itemid < 4000 )
-) INHERITS (chartevents);
-CREATE TABLE chartevents_2 (
-	    CHECK ( itemid >= 4000  AND itemid < 30000 )
-) INHERITS (chartevents);
-CREATE TABLE chartevents_3 (
-	    CHECK ( itemid >= 30000  AND itemid < 38000 )
-) INHERITS (chartevents);
-CREATE TABLE chartevents_4 (
-	    CHECK ( itemid >= 38000  AND itemid < 220000 )
-) INHERITS (chartevents);
-CREATE TABLE chartevents_5 (
-	    CHECK ( itemid >= 220000  AND itemid < 300000 )
-) INHERITS (chartevents);
-CREATE TABLE chartevents_6 (
-	    CHECK ( itemid IS NULL )
-) INHERITS (chartevents);
---trigger
+-- CREATE CHARTEVENTS TABLE
+CREATE TABLE chartevents_1 ( CHECK ( itemid >= 1  AND itemid < 161 )) INHERITS (chartevents);
+CREATE TABLE chartevents_2 ( CHECK ( itemid >= 161  AND itemid < 428 )) INHERITS (chartevents);
+CREATE TABLE chartevents_3 ( CHECK ( itemid >= 428  AND itemid < 615 )) INHERITS (chartevents);
+CREATE TABLE chartevents_4 ( CHECK ( itemid >= 615  AND itemid < 742 )) INHERITS (chartevents);
+CREATE TABLE chartevents_5 ( CHECK ( itemid >= 742  AND itemid < 3338 )) INHERITS (chartevents);
+CREATE TABLE chartevents_6 ( CHECK ( itemid >= 3338  AND itemid < 3723 )) INHERITS (chartevents);
+CREATE TABLE chartevents_7 ( CHECK ( itemid >= 3723  AND itemid < 8523 )) INHERITS (chartevents);
+CREATE TABLE chartevents_8 ( CHECK ( itemid >= 8523  AND itemid < 220074 )) INHERITS (chartevents);
+CREATE TABLE chartevents_9 ( CHECK ( itemid >= 220074  AND itemid < 323769 )) INHERITS (chartevents);
+	
+-- CREATE CHARTEVENTS TRIGGER
 CREATE OR REPLACE FUNCTION chartevents_insert_trigger()
 RETURNS TRIGGER AS $$
 BEGIN
-	IF ( NEW.itemid >= 1 AND
-		NEW.itemid < 4000 ) THEN
-		INSERT INTO chartevents_1 VALUES (NEW.*);
-	ELSIF ( NEW.itemid >= 4000 AND
-		NEW.itemid < 30000 ) THEN
-		INSERT INTO chartevents_2 VALUES (NEW.*);
-	ELSIF ( NEW.itemid >= 30000 AND
-		NEW.itemid < 38000 ) THEN
-		INSERT INTO chartevents_3 VALUES (NEW.*);
-	ELSIF ( NEW.itemid >= 38000 AND
-		NEW.itemid < 220000 ) THEN
-		INSERT INTO chartevents_4 VALUES (NEW.*);
-	ELSIF ( NEW.itemid >= 220000 AND
-		NEW.itemid < 300000 ) THEN
-		INSERT INTO chartevents_5 VALUES (NEW.*);
+
+
+IF ( NEW.itemid >= 1 AND NEW.itemid < 161 ) THEN INSERT INTO chartevents_1 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 161 AND NEW.itemid < 428 ) THEN INSERT INTO chartevents_2 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 428 AND NEW.itemid < 615 ) THEN INSERT INTO chartevents_3 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 615 AND NEW.itemid < 742 ) THEN INSERT INTO chartevents_4 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 742 AND NEW.itemid < 3338 ) THEN INSERT INTO chartevents_5 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 3338 AND NEW.itemid < 3723 ) THEN INSERT INTO chartevents_6 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 3723 AND NEW.itemid < 8523 ) THEN INSERT INTO chartevents_7 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 8523 AND NEW.itemid < 220074 ) THEN INSERT INTO chartevents_8 VALUES (NEW.*);
+ELSIF ( NEW.itemid >= 220074 AND NEW.itemid < 323769 ) THEN INSERT INTO chartevents_9 VALUES (NEW.*);
 	ELSE
-		INSERT INTO chartevents_6 VALUES (NEW.*);
+		INSERT INTO chartevents_null VALUES (NEW.*);
        END IF;
 RETURN NULL;
 END;
