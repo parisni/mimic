@@ -1,0 +1,10 @@
+row_id,itemid,label,abbreviation,dbsource,linksto,code,category,unitname,param_type,lownormalvalue,highnormalvalue,valid,justif,
+121,116,Cardiac Index,,carevue,chartevents,,,,,,,true,,
+3 739,2 714,DO2 INDEX,,carevue,chartevents,,,,,,,FALSE,,
+3 740,2 715,VO2 INDEX,,carevue,chartevents,,,,,,,FALSE,,
+4 428,6 919,index,,carevue,chartevents,,,,,,,FALSE,no d,ate
+4 721,7 610,cardiac index      o,,carevue,chartevents,,,,,,,FALSE,no data,
+15 317,228 368,Cardiac Index (CI NICOM),Cardiac Index (CI NICOM),metavision,chartevents,,NICOM,L/min/m2,Numeric,,,true,,
+15 324,228 375,Stroke Volume Index (SVI NICOM),Stroke Volume Index (SVI NICOM),metavision,chartevents,,NICOM,%,Numeric,,,FALSE,,
+15 331,228 382,Total Peripheral Resistance Index (TPRI) (NICOM),TPRI (NICOM),metavision,chartevents,,NICOM,dynes*sec/cm5/m2,Numeric,,,FALSE,,
+15 380,228 444,BIS Index Range,BIS Index Range,metavision,chartevents,,Pain/Sedation,None,Numeric,,,FALSE,,

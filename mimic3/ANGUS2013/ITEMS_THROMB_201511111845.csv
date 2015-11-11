@@ -1,0 +1,8 @@
+row_id,itemid,label,abbreviation,dbsource,linksto,code,category,unitname,param_type,lownormalvalue,highnormalvalue,valid,justif
+1 132,844,Thrombin (16-21),,carevue,chartevents,,Coags,,,,,true,
+2 989,1 537,Thrombin,,carevue,chartevents,,Coags,,,,,true,
+14 740,227 465,Prothrombin time,PT,metavision,chartevents,,Labs,None,Numeric with tag,,,true,
+14 744,227 469,Thrombin,Thrombin,metavision,chartevents,,Labs,None,Numeric with tag,,,true,
+13 010,221 004,Thrombocyte suspension,Thrombocyte suspension,metavision,ioevents,,Fluids - Other (Not In Use),mL,Solution,,,FALSE,empty
+14 117,225 686,ZThrombin,ZThrombin,metavision,chartevents,,Labs,None,Numeric,,,FALSE,empty
+12 740,220 560,ZProthrombin time,ZPT,metavision,chartevents,,Labs,None,Numeric,,,FALSE,empty

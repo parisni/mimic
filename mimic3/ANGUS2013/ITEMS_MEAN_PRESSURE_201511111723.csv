@@ -1,0 +1,51 @@
+row_id,itemid,label,abbreviation,dbsource,linksto,code,category,unitname,param_type,lownormalvalue,highnormalvalue,valid,justif
+410,444,Mean Airway Pressure,,carevue,chartevents,,,,,,,FALSE,
+13 361,224 697,Mean Airway Pressure,Mean Airway Pressure,metavision,chartevents,,Respiratory,cmH2O,Numeric,,,FALSE,
+12 771,220 052,Arterial Blood Pressure mean,ABPm,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,TRUE,
+14 555,226 849,RA (mean) pressure (PA Line),RA (mean) pressure (PA Line),metavision,chartevents,,PA Line Insertion,mmHg,Numeric,,,FALSE,
+14 562,226 857,PA mean pressure (PA Line),PA mean pressure (PA Line),metavision,chartevents,,PA Line Insertion,mmHg,Numeric,,,FALSE,
+12 776,220 061,Pulmonary Artery Pressure mean,PAPm,metavision,chartevents,,Hemodynamics,mmHg,Numeric,10,20,FALSE,
+12 789,220 181,Non Invasive Blood Pressure mean,NBPm,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,TRUE,
+409,443,Manual BP Mean(calc),,carevue,chartevents,,,,,,,TRUE,
+410,444,Mean Airway Pressure,,carevue,chartevents,,,,,,,FALSE,
+420,456,NBP Mean,,carevue,chartevents,,,,,,,TRUE,
+58,52,Arterial BP Mean,,carevue,chartevents,,,,,,,TRUE,
+1 301,1 209,HFO mean airway Pres,,carevue,chartevents,,,,,,,FALSE,
+222,224,IABP Mean,,carevue,chartevents,,,,,,,TRUE,
+451,491,PAP Mean,,carevue,chartevents,,,,,,,FALSE,
+928,3 312,BP Cuff [Mean],,carevue,chartevents,,,,,,,FALSE,Unit inadapted
+930,3 314,BP Left Arm [Mean],,carevue,chartevents,,,,,,,FALSE,
+932,3 316,BP Left Leg [Mean],,carevue,chartevents,,,,,,,FALSE,
+934,3 318,BP PAL [Mean],,carevue,chartevents,,,,,,,FALSE,
+936,3 320,BP Right Arm [Mean],,carevue,chartevents,,,,,,,FALSE,
+938,3 322,BP Right Leg [Mean],,carevue,chartevents,,,,,,,FALSE,
+940,3 324,BP UAC [Mean],,carevue,chartevents,,,,,,,FALSE,Breath
+1 806,5 702,FEM ART MEAN,,carevue,chartevents,,,,,,,FALSE,
+1 083,3 502,Mean PAW,,carevue,chartevents,,,,,,,FALSE,
+1 084,3 503,Mean PAW [Meas],,carevue,chartevents,,,,,,,FALSE,
+3 121,1 672,MEAN AIRWAY PRESS,,carevue,chartevents,,,,,,,FALSE,
+1 835,5 731,FEMORAL ABP MEAN,,carevue,chartevents,,,,,,,TRUE,
+3 692,2 647,art mean,,carevue,chartevents,,,,,,,TRUE,
+3 241,1 864,HFO-Max mean airway,,carevue,chartevents,,,,,,,FALSE,
+3 242,1 865,HFO-Min mean airway,,carevue,chartevents,,,,,,,FALSE,
+3 465,2 294,ART MEAN,,carevue,chartevents,,,,,,,TRUE,
+3 745,2 732,Femoral ABP (Mean),,carevue,chartevents,,,,,,,TRUE,
+4 434,6 927,Arterial Mean #3,,carevue,chartevents,,,,,,,FALSE,Just 13
+4 726,7 618,BP Lt. leg Mean,,carevue,chartevents,,,,,,,FALSE,Just One
+4 727,7 620,BP Rt. Arm Mean,,carevue,chartevents,,,,,,,FALSE,Just One
+4 728,7 622,BP Rt. Leg Mean,,carevue,chartevents,,,,,,,FALSE,Just one
+4 269,6 590,arterial mean #2,,carevue,chartevents,,,,,,,FALSE,just One
+4 304,6 653,femoral abp mean,,carevue,chartevents,,,,,,,FALSE,9 patients
+4 326,6 702,Arterial BP Mean #2,,carevue,chartevents,,,,,,,TRUE,
+13 870,225 491,Patient identified correctly by 2 means (THCEN),Patient identified correctly by 2 means (THCEN),metavision,chartevents,,Thoracentesis,,Text,,,FALSE,0
+13 873,225 499,Patient identified correctly by 2 means (PACEN),Patient identified correctly by 2 means (PACEN),metavision,chartevents,,Paracentesis,,Text,,,FALSE,
+13 220,224 322,IABP Mean,MAP - Assisted,metavision,chartevents,,IABP,mmHg,Numeric,,,TRUE,
+13 768,225 312,ART BP mean,ART BP mean,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,TRUE,
+13 361,224 697,Mean Airway Pressure,Mean Airway Pressure,metavision,chartevents,,Respiratory,cmH2O,Numeric,,,FALSE,
+12 771,220 052,Arterial Blood Pressure mean,ABPm,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,TRUE,
+14 555,226 849,RA (mean) pressure (PA Line),RA (mean) pressure (PA Line),metavision,chartevents,,PA Line Insertion,mmHg,Numeric,,,FALSE,Empty
+14 561,226 855,PCWP (mean) (PA Line),PCWP (mean) (PA Line),metavision,chartevents,,PA Line Insertion,mmHg,Numeric,,,FALSE,Empty
+14 562,226 857,PA mean pressure (PA Line),PA mean pressure (PA Line),metavision,chartevents,,PA Line Insertion,mmHg,Numeric,,,FALSE,Empty
+12 776,220 061,Pulmonary Artery Pressure mean,PAPm,metavision,chartevents,,Hemodynamics,mmHg,Numeric,10,20,FALSE,
+12 789,220 181,Non Invasive Blood Pressure mean,NBPm,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,TRUE,
+14 223,226 189,Patient identified correctly by 2 means (Intubation),Patient identified correctly by 2 means (Intubatio,metavision,chartevents,,Intubation,,Text,,,FALSE,
