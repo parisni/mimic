@@ -1,0 +1,32 @@
+row_id,itemid,label,abbreviation,dbsource,linksto,code,category,unitname,param_type,lownormalvalue,highnormalvalue,valid,justif
+408,442,Manual BP [Systolic],,carevue,chartevents,,,,,,,true,
+419,455,NBP [Systolic],,carevue,chartevents,,,,,,,true,
+442,480,Orthostat BP sitting [Systolic],,carevue,chartevents,,,,,,,true,
+444,482,OrthostatBP standing [Systolic],,carevue,chartevents,,,,,,,true,
+446,484,Orthostatic BP lying [Systolic],,carevue,chartevents,,,,,,,true,
+32,6,ABP [Systolic],,carevue,chartevents,,,,,,,true,
+57,51,Arterial BP [Systolic],,carevue,chartevents,,,,,,,true,
+61,55,Assisted Systole,,carevue,chartevents,,,,,,,true,incertain mais vrais car a aggreger avec le spsis
+452,492,PAP [Systolic],,carevue,chartevents,,,,,,,FALSE,
+929,3 313,BP Cuff [Systolic],,carevue,chartevents,,,,,,,FALSE,pas unite de pression
+931,3 315,BP Left Arm [Systolic],,carevue,chartevents,,,,,,,FALSE,pas unite de pression
+933,3 317,BP Left Leg [Systolic],,carevue,chartevents,,,,,,,FALSE,pas unite de pression
+935,3 319,BP PAL [Systolic],,carevue,chartevents,,,,,,,FALSE,breath pas pression
+937,3 321,BP Right Arm [Systolic],,carevue,chartevents,,,,,,,FALSE,flow unit
+939,3 323,BP Right Leg [Systolic],,carevue,chartevents,,,,,,,FALSE,flow un it
+941,3 325,BP UAC [Systolic],,carevue,chartevents,,,,,,,FALSE,breath 
+618,666,Systolic Unloading,,carevue,chartevents,,,,,,,FALSE,preload maneuver 
+3 680,2 633,unassisted systole,,carevue,chartevents,,,,,,,FALSE,no unit and few people (11 mesurments)
+4 736,7 643,RVSYSTOLIC,,carevue,chartevents,,,,,,,FALSE,error just one value
+4 325,6 701,Arterial BP #2 [Systolic],,carevue,chartevents,,,,,,,TRUE,
+13 161,224 167,Manual Blood Pressure Systolic Left,Manual BPs L,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,true,
+13 213,224 309,Assisted Systole,SYS - Assisted,metavision,chartevents,,IABP,mmHg,Numeric,,,true,
+13 766,225 309,ART BP Systolic,ART BP Systolic,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,true,
+13 534,224 652,Unassisted Systole,SYS - Unassisted,metavision,chartevents,,IABP,mmHg,Numeric,,,true,
+14 548,227 243,Manual Blood Pressure Systolic Right,Manual BPs R,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,true,
+15 177,228 152,Aortic Pressure Signal - Systolic,Aortic Pressure Signal - Systolic,metavision,chartevents,,Impella,None,Numeric,,,true,pas unité ds la table chartevent
+12 769,220 050,Arterial Blood Pressure systolic,ABPs,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,90,140,true,
+12 774,220 059,Pulmonary Artery Pressure systolic,PAPs,metavision,chartevents,,Hemodynamics,mmHg,Numeric,15,25,FALSE,
+14 556,226 850,RV systolic pressure(PA Line),RV systolic pressure(PA Line),metavision,chartevents,,PA Line Insertion,mmHg,Numeric,,,FALSE,
+14 558,226 852,PA systolic pressure(PA Line),PA systolic pressure(PA Line),metavision,chartevents,,PA Line Insertion,mmHg,Numeric,,,FALSE,no data
+12 787,220 179,Non Invasive Blood Pressure systolic,NBPs,metavision,chartevents,,Routine Vital Signs,mmHg,Numeric,,,true,
