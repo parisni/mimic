@@ -376,17 +376,17 @@ INSERT INTO angus2013_sepsis (subject_id,hadm_id) (
         FROM infla_vars 
         UNION
         SELECT subject_id, hadm_id
-        FROM organ_dysf 
+        FROM hemo_vars 
         UNION
         SELECT subject_id, hadm_id
-        FROM infla_vars 
+        FROM organ_dysf 
         UNION
         SELECT subject_id, hadm_id
         FROM tissue_perf 
     )
 
 );
--- END SEPSIS | HADM = 22983
+-- END SEPSIS | HADM = 23007
 
 
 -- BEGIN SEVERE SEPSIS
