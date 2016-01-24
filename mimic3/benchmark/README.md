@@ -1,12 +1,13 @@
-All tests have been made on chartevents (297938224 tuples)
-32 GO ram, 8 core, Ubuntu
-postgresql 9.4;MonetDB 5.1;apache Drill 1.4; 
-Query 1 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  where itemid < 5000 GROUP BY itemid;
-Query 2 = SELECT AVG(valuenum) FROM mimiciii.chartevents  where itemid = 5000
-Query 3 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  where itemid < 100000 GROUP BY itemid;
-Query 4 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  GROUP BY itemid
+* All tests have been made on chartevents (297938224 tuples)
+* 32 GO ram, 8 core, Ubuntu
+* postgresql 9.4;MonetDB 5.1;apache Drill 1.4; 
 
-=Postgresql=
+1. Query 1 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  where itemid < 5000 GROUP BY itemid;
+1. Query 2 = SELECT AVG(valuenum) FROM mimiciii.chartevents  where itemid = 5000
+1. Query 3 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  where itemid < 100000 GROUP BY itemid;
+1. Query 4 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  GROUP BY itemid
+
+# Postgresql
 
 * Query 1
 4 min 40
@@ -21,7 +22,7 @@ Query 4 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  GROUP BY itemi
 4 min 30
 
 
-=Postgresql partitioned 10 times=
+#  Postgresql partitioned 10 times
 
 * Query 1
 2 min 30
@@ -36,7 +37,7 @@ Query 4 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  GROUP BY itemi
 5min
 
 
-=MonetDB=
+# MonetDB
 
 * Query 1
 22 seconds
@@ -51,7 +52,7 @@ Query 4 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  GROUP BY itemi
 3 seconds
 
 
-=Apache Drill=
+# Apache Drill
 
 * Query 1
 19 seconds
@@ -65,7 +66,7 @@ Query 4 = SELECT AVG(valuenum), itemid FROM mimiciii.chartevents  GROUP BY itemi
 * Query 4
 17 seconds
 
-=Conclusion=
+# Conclusion
 
 * Not surprisingly, Postgresql partitionned & not partitionned has same results for fetching small amount of rows (query 2). btree Index complexity are O(log(n)).
 Moreover, when fetching more rows, seq scan are used over the whole table. This leads partitionned table to have performances increased in query 1 and 3. However query 4 use whole rows then it scans all partitionned table as well. This leads same performances in this case and maybe counter productive results because of number of table to scan in partitionned way.
