@@ -10,61 +10,61 @@
 # Postgresql
 
 * Query 1
-4 min 40
+= 4 min 40
 
 * Query 2
-1 ms
+= 1 ms
 
 * Query 3
-4 min 30
+= 4 min 30
 
 * Query 4
-4 min 30
+= 4 min 30
 
 
 #  Postgresql partitioned 10 times
 
 * Query 1
-2 min 30
+= 2 min 30
 
 * Query 2
-1 ms
+= 1 ms
 
 * Query 3
-3 min
+= 3 min
 
 * Query 4
-5min
+= 5min
 
 
 # MonetDB
 
 * Query 1
-22 seconds
+= 22 seconds
 
 * Query 2
-1 ms
+= 1 ms
 
 * Query 3
-5 seconds
+= 5 seconds
 
 * Query 4
-3 seconds
+= 3 seconds
 
 
 # Apache Drill
 
 * Query 1
-19 seconds
+= 19 seconds
 
 * Query 2
-6 seconds
+= 6 seconds
 
 * Query 3
-21 seconds
+= 21 seconds
 
 * Query 4
-17 seconds
+= 17 seconds
 
 # Conclusion
 
