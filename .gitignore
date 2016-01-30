@@ -14,3 +14,6 @@ mimic3/CHOCO/*
 mimic3/csv
 !mimic3/R
 mimic2
+*.swp
+*.swo
+*~
