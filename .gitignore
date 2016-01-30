@@ -10,7 +10,7 @@ mimic3/VENTI/*
 !mimic3/doc/LMayaud_Thesis_edited.pdf
 mimic3/CHOCO/*
 !mimic3/CHOCO/sql
-!mimic3/databases
+!mimic3/databases/*
 !mimic3/CHOCO/README.md
 mimic3/csv
 !mimic3/R
