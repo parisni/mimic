@@ -138,6 +138,9 @@ INSERT INTO infection_population (subject_id, hadm_id)(
 -- END SEPSIS - INFECTION POP | HADM = 23963
 
 -- BEGIN - CHAP 1 GENERAL VARS 
+-- TODO: WEIGHT as LBS / KG -> precise itemid
+-- TODO: WEIGHT 24h/48/72h -> precise window
+-- TODO: Temperature as C / F -> precise itemid
 -- WEIGHT BALANCE
 DROP TABLE IF EXISTS weight_balance_fluid;
 CREATE TABLE IF NOT EXISTS weight_balance_fluid(
@@ -150,7 +153,7 @@ INSERT INTO weight_balance_fluid (subject_id, hadm_id) (
 		-- TODO : weight in LBS
 		WITH    rows AS
 		(
-			SELECT subject_id, hadm_id, icustay_id, valuenum,itemid, charttime ,ROW_NUMBER() OVER (ORDER BY subject_id, hadm_id, icustay_id, charttime) AS rn 
+			SELECT subject_id, hadm_id, icustay_id, valuenum, itemid, charttime, ROW_NUMBER() OVER (ORDER BY subject_id, hadm_id, icustay_id, charttime) AS rn 
 			FROM    mimiciii.chartevents
 			WHERE  itemid IN (763, 
 				--  3580, -- !! poids nouveau nés ?
@@ -203,6 +206,7 @@ INSERT INTO general_vars (subject_id, hadm_id)(
 
 
 --BEGIN - CHAP 2 INFLA VARS
+--TODO: Procalcitonin is missing ?
 DROP TABLE IF EXISTS infla_vars;
 CREATE TABLE IF NOT EXISTS infla_vars(
 	subject_id integer,
@@ -222,6 +226,7 @@ INSERT INTO infla_vars (subject_id, hadm_id)(
 
 
 --BEGIN - CHAP 3 HEMO_VARS
+--TODO: arterial pressure mean < 70 and not a value
 DROP TABLE IF EXISTS hemo_vars;
 CREATE TABLE IF NOT EXISTS hemo_vars(
 	subject_id integer,
@@ -235,8 +240,8 @@ INSERT INTO hemo_vars (subject_id, hadm_id)(
     WHERE
 	-- BEGIN HEMODYNAMIQ VARIABLES
 	--1. arterial hypotension
---	(ce.itemid IN (442, 455, 480, 482, 484, 6, 51, 55, 6701, 224167, 224309, 225309, 224652, 227243, 228152, 220050, 220179) AND ce.valuenum < 90 ) OR --systolic pressure | 29206 ENLEVÉ POUR SELECTIVITÉ
---	(ce.itemid IN ( 220052, 220181, 443, 456, 52, 224, 5731, 2647, 2294, 2732, 6702, 224322, 225312, 220052, 220181 ) AND ce.valuenum < 70 ) OR--mean arterial pressure | 44231 ENLEVÉ POUR SELECTIVITÉ
+	(ce.itemid IN (442, 455, 480, 482, 484, 6, 51, 55, 6701, 224167, 224309, 225309, 224652, 227243, 228152, 220050, 220179) AND ce.valuenum < 90 ) OR --systolic pressure | 29206 ENLEVÉ POUR SELECTIVITÉ
+	(ce.itemid IN ( 220052, 220181, 443, 456, 52, 224, 5731, 2647, 2294, 2732, 6702, 224322, 225312, 220052, 220181 ) AND ce.valuenum < 70 ) OR--mean arterial pressure | 44231 ENLEVÉ POUR SELECTIVITÉ
 	--2elevated mixed venous ox sat | 5540
 	(ce.itemid IN ( 823 , 227686 , 225674 ) AND ce.valuenum > 70) OR
 	--3 elevated cardiac index | 7962
@@ -245,6 +250,7 @@ INSERT INTO hemo_vars (subject_id, hadm_id)(
 --END - CHAP 3 HEMO_VARS | HADM = 44579
 
 --BEGIN - CHAP 4 ORGAN DISFONC
+-- TODO: Manage Units problems mmHG, klPascal
 DROP TABLE IF EXISTS arterial_hypox;
 CREATE TABLE IF NOT EXISTS arterial_hypox (
 	subject_id integer,
@@ -270,13 +276,14 @@ CREATE TABLE IF NOT EXISTS creat(
 	subject_id integer,
 	hadm_id integer
 );
+-- TODO: variable window on diffetime creat -> test
 CREATE INDEX ON creat (subject_id, hadm_id);
 INSERT INTO creat (subject_id, hadm_id) (
 	WITH creat as(--GENERAL VAR : icu where weight variation up to 2 kg
 		-- TODO : weight in LBS
 		WITH    rows AS
 		(
-			SELECT subject_id, hadm_id, icustay_id, valuenum,itemid, charttime ,ROW_NUMBER() OVER (ORDER BY subject_id, hadm_id, icustay_id, charttime) AS rn 
+			SELECT subject_id, hadm_id, icustay_id, valuenum, itemid, charttime, ROW_NUMBER() OVER (ORDER BY subject_id, hadm_id, icustay_id, charttime) AS rn 
 			FROM    mimiciii.chartevents
 			WHERE  itemid IN (791, 1525, 3750, 220615) 
 		),
@@ -297,6 +304,7 @@ CREATE TABLE IF NOT EXISTS organ_dysf(
 	subject_id integer,
 	hadm_id integer
 );
+-- TODO: units, selectivity of plaquet
 CREATE INDEX ON organ_dysf (subject_id, hadm_id);
 INSERT INTO organ_dysf (subject_id, hadm_id) (
 	SELECT  DISTINCT   ce.subject_id, ce.hadm_id
@@ -304,12 +312,12 @@ INSERT INTO organ_dysf (subject_id, hadm_id) (
 	mimiciii.chartevents ce
     WHERE
 	((ce.subject_id, ce.hadm_id) IN (SELECT subject_id, hadm_id FROM arterial_hypox)) OR -- arterial_hypox | 1121
-	( ce.itemid IN ( 43522, 43171, 43173, 43365, 43373, 43374, 43379, 43380, 43576, 43654 ) AND ce.valuenum < 0.5 ) OR --URINES !!CAUTION : ONLY METAVIZ HERE !! UNITÉS 
+	( ce.itemid IN ( 43522, 43171, 43173, 43365, 43373, 43374, 43379, 43380, 43576, 43654 ) AND ce.valuenum < 0.5 ) OR --URINES kg/hr !!CAUTION : ONLY METAVIZ HERE !! UNITÉS 
 	((ce.subject_id , ce.hadm_id) IN (SELECT creat.subject_id, creat.hadm_id FROM creat)) OR --creat | 6695
 	--thromb !! A FAIRE 
 	(ce.itemid IN ( 844 , 1537 , 227465 , 227469) AND ce.valuenum > 60 ) OR --les unités semblent etre en secondes -- thromb | 351
 	--paralithiq ileus => NO WAY
---	( ce.itemid IN ( 225678, 227457, 828, 3789, 6256 ) AND ce.valuenum < 100000 ) OR -- platelet !! UNITÉ À VÉRIF | | 54737 ENLEVÉ POUR SELECTIVITÉ
+	( ce.itemid IN ( 225678, 227457, 828, 3789, 6256 ) AND ce.valuenum < 100000 ) OR -- platelet !! UNITÉ À VÉRIF | | 54737 ENLEVÉ POUR SELECTIVITÉ
 	( ce.itemid IN ( 4948, 225651, 225690 ) AND valueuom ILIKE 'mg/dL' AND ce.valuenum > 4) -- BILLIRUBIN !! il faut aussi traduire d'autres unités | 1400
 );
 --BEGIN - CHAP 4 ORGAN DISFONC | HADM = 54761
@@ -338,6 +346,7 @@ INSERT INTO tissue_perf (subject_id, hadm_id) (
 
 
 -- BEGIN SEPSIS
+-- TODO: SEPSIS DOES NOT INTEREST US ANYMORE
 DROP TABLE IF EXISTS angus2013_sepsis;
 CREATE TABLE IF NOT EXISTS angus2013_sepsis (
 	subject_id integer,
@@ -369,6 +378,8 @@ INSERT INTO angus2013_sepsis (subject_id,hadm_id) (
 
 
 -- BEGIN SEVERE SEPSIS
+-- TODO: for general variables and inflammatory variables, 
+-- count number of criteria per CF BELOMO
 DROP TABLE IF EXISTS angus2013_sepsis_severe;
 CREATE TABLE IF NOT EXISTS angus2013_sepsis_severe (
 	subject_id integer,
@@ -394,18 +405,27 @@ CREATE TABLE IF NOT EXISTS ids_vaso(
 	    icustay_id integer
 );
 CREATE INDEX ON ids_vaso (subject_id, hadm_id, icustay_id);
-INSERT INTO ids_vaso (subject_id,hadm_id, icustay_id) (SELECT distinct io.subject_id, io.hadm_id, io.icustay_id 
-	    FROM mimiciii.ioevents io, mimiciii.icustayevents ic
-	    WHERE 
-	    io.subject_id = ic.subject_id AND
-	    io.hadm_id = ic.hadm_id AND
-	    io.icustay_id = ic.icustay_id AND
-	  -- io.starttime BETWEEN ic.intime AND ic.intime + '1 day' AND
-	    io.itemid in (select  itemid 
-		        from mimiciii.d_items 
-			where lower(label) like '%evophed%' or lower(label) like '%pressin%' or lower(label) like '%ephrin%') 
-		);
---TODO: TRANSFORM IO into 
+INSERT INTO ids_vaso (subject_id,hadm_id, icustay_id) (
+	(
+	SELECT subject_id, hadm_id, icustay_id FROM mimiciii.inputevents_cv WHERE itemid IN (select itemid from mimiciii.d_items where lower(label) like '%evophed%' or lower(label) like '%pressin%' or lower(label) like '%ephrin%')
+	)
+	UNION
+	(
+	SELECT  subject_id, hadm_id, icustay_id FROM mimiciii.inputevents_mv WHERE itemid IN (select itemid from mimiciii.d_items where lower(label) like '%evophed%' or lower(label) like '%pressin%' or lower(label) like '%ephrin%')
+)
+	);
+	--    SELECT distinct io.subject_id, io.hadm_id, io.icustay_id 
+	--    FROM mimiciii.inputevent io
+	--    WHERE 
+	--    io.subject_id = ic.subject_id AND
+	--    io.hadm_id = ic.hadm_id AND
+	--    io.icustay_id = ic.icustay_id AND
+	--  -- io.starttime BETWEEN ic.intime AND ic.intime + '1 day' AND
+	--    io.itemid in (select  itemid 
+	--	        from mimiciii.d_items 
+	--		where lower(label) like '%evophed%' or lower(label) like '%pressin%' or lower(label) like '%ephrin%') 
+	--	);
+
 DROP TABLE IF EXISTS angus2013_sepsis_shock;
 CREATE TABLE IF NOT EXISTS angus2013_sepsis_shock (
 	subject_id integer,
