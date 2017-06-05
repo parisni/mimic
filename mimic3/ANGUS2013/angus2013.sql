@@ -155,7 +155,7 @@ INSERT INTO weight_balance_fluid (subject_id, hadm_id) (
 			WHERE  itemid IN (763, 
 				--  3580, -- !! poids nouveau nés ?
 				3581, 3582, 3693, 224639, 226512, 226531) 
-			AND uom ILIKE 'kg'
+			AND valueuom ILIKE 'kg'
 		),
 		diff AS (
 			SELECT  mc.subject_id, mc.hadm_id, mc.icustay_id,mp.itemid, mp.valuenum - mc.valuenum   as diffe, mc.valuenum, mp.charttime - mc.charttime   as diffetime, mc.valuenum as w1, mp.valuenum as w2
@@ -310,7 +310,7 @@ INSERT INTO organ_dysf (subject_id, hadm_id) (
 	(ce.itemid IN ( 844 , 1537 , 227465 , 227469) AND ce.valuenum > 60 ) OR --les unités semblent etre en secondes -- thromb | 351
 	--paralithiq ileus => NO WAY
 --	( ce.itemid IN ( 225678, 227457, 828, 3789, 6256 ) AND ce.valuenum < 100000 ) OR -- platelet !! UNITÉ À VÉRIF | | 54737 ENLEVÉ POUR SELECTIVITÉ
-	( ce.itemid IN ( 4948, 225651, 225690 ) AND uom ILIKE 'mg/dL' AND ce.valuenum > 4) -- BILLIRUBIN !! il faut aussi traduire d'autres unités | 1400
+	( ce.itemid IN ( 4948, 225651, 225690 ) AND valueuom ILIKE 'mg/dL' AND ce.valuenum > 4) -- BILLIRUBIN !! il faut aussi traduire d'autres unités | 1400
 );
 --BEGIN - CHAP 4 ORGAN DISFONC | HADM = 54761
 
@@ -405,7 +405,7 @@ INSERT INTO ids_vaso (subject_id,hadm_id, icustay_id) (SELECT distinct io.subjec
 		        from mimiciii.d_items 
 			where lower(label) like '%evophed%' or lower(label) like '%pressin%' or lower(label) like '%ephrin%') 
 		);
-
+--TODO: TRANSFORM IO into 
 DROP TABLE IF EXISTS angus2013_sepsis_shock;
 CREATE TABLE IF NOT EXISTS angus2013_sepsis_shock (
 	subject_id integer,
