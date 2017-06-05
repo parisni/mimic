@@ -5,9 +5,8 @@
 -- Set the correct path to data files before running script.
 
 -- Create the database and schema
-CREATE USER MIMIC;
 CREATE DATABASE MIMIC OWNER MIMIC;
-\c mimic;
+
 CREATE SCHEMA MIMICIII;
 
 -- -- Example command for importing from a CSV to a table
@@ -42,11 +41,9 @@ CREATE SCHEMA MIMICIII;
    
    
 -- Example command for importing from a CSV to a table
-COPY MIMICIII.ADMISSIONS 
-    FROM '/home/natus/Projets/mimic/mimic3/csv/ADMISSIONS_DATA_TABLE.csv' 
-    DELIMITER ',' 
-    CSV HEADER;
- 
+   COPY 58976 OFFSET 2 RECORDS INTO MIMICIII.ADMISSIONS 
+    FROM '/home/natus/Projets/mimic/mimic3/csv/ADMISSIONS.csv' 
+    USING DELIMITERS ',','\n','"' NULL AS '';
 --------------------------------------------------------
 --  DDL for Table CALLOUT
 --------------------------------------------------------
@@ -79,11 +76,9 @@ CREATE TABLE MIMICIII.CALLOUT
         );
 
 -- Example command for importing from a CSV to a table
-COPY MIMICIII.CALLOUT 
-    FROM '/home/natus/Projets/mimic/mimic3/csv/CALLOUT_DATA_TABLE.csv' 
-    DELIMITER ',' 
-    CSV HEADER;
-    
+  COPY 34499 OFFSET 2 RECORDS INTO MIMICIII.CALLOUT
+    FROM '/home/natus/Projets/mimic/mimic3/csv/CALLOUT.csv' 
+    USING DELIMITERS ',','\n','"' NULL AS '';
 --------------------------------------------------------
 --  DDL for Table CAREGIVERS
 --------------------------------------------------------
