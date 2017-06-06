@@ -155,10 +155,10 @@ INSERT INTO weight_balance_fluid (subject_id, hadm_id) (
 		(
 			SELECT subject_id, hadm_id, icustay_id, valuenum, itemid, charttime, ROW_NUMBER() OVER (ORDER BY subject_id, hadm_id, icustay_id, charttime) AS rn 
 			FROM    mimiciii.chartevents
-			WHERE  itemid IN (763, 
+			WHERE  itemid IN (763, 224639 --kg only because other data are strange  cf csv
 				--  3580, -- !! poids nouveau nés ?
-				3581, 3582, 3693, 224639, 226512, 226531) 
-			AND valueuom ILIKE 'kg'
+				--  3581, 3582, 3693,224639, 226512, 226531
+			)
 		),
 		diff AS (
 			SELECT  mc.subject_id, mc.hadm_id, mc.icustay_id,mp.itemid, mp.valuenum - mc.valuenum   as diffe, mc.valuenum, mp.charttime - mc.charttime   as diffetime, mc.valuenum as w1, mp.valuenum as w2
