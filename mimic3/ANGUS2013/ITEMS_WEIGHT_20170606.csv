@@ -1,23 +1,23 @@
-,row_id,itemid,label,abbreviation,dbsource,linksto,category,unitname,param_type,conceptid
-0,537,580,Previous Weight,,carevue,chartevents,,,,
-1,538,581,Previous WeightF,,carevue,chartevents,,,,
-2,2214,4183,Birthweight (kg),,carevue,chartevents,,,,
-3,682,733,Weight Change,,carevue,chartevents,,,,
-4,688,763,Daily Weight,,carevue,chartevents,,,,
-5,2765,3580,Present Weight  (kg),,carevue,chartevents,,,,
-6,2766,3581,Present Weight  (lb),,carevue,chartevents,,,,
-7,2767,3582,Present Weight  (oz),,carevue,chartevents,,,,
-8,2768,3583,Previous Weight (kg),,carevue,chartevents,,,,
-9,2848,3692,Weight Change  (gms),,carevue,chartevents,,,,
-10,2849,3693,Weight Kg,,carevue,chartevents,,,,
-11,2852,3723,Birth Weight    (kg),,carevue,chartevents,,,,
-12,4467,7000,ideal body weight,,carevue,chartevents,,,,
-13,14627,226846,Feeding Weight,Feeding Weight,metavision,chartevents,General,kg,Numeric,
-14,13420,224639,Daily Weight,Daily Weight,metavision,chartevents,General,kg,Numeric,
-15,15168,227854,Weight Bearing Status,Weight Bearing Status,metavision,chartevents,OT Notes,,Text,
-16,14391,226512,Admission Weight (Kg),Admission Weight (Kg),metavision,chartevents,General,kg,Numeric,
-17,14401,226531,Admission Weight (lbs.),Admission Weight (lbs.),metavision,chartevents,General,None,Numeric,
-18,13739,225124,Unintentional weight loss >10 lbs.,Unintentional weight loss >10 lbs.,metavision,chartevents,Adm History/FHPA,,Checkbox,
-19,14501,226740,APACHE II Diagnosistic weight factors - Medical,Diagnostic weight category - Medical,metavision,chartevents,Scores - APACHE II,,Text,
-20,14502,226741,APACHE II Diagnosistic weight factors - Surgical emergency,Diagnosistic weight categories - Surgical emergenc,metavision,chartevents,Scores - APACHE II,,Text,
-21,14503,226742,APACHE II Diagnosistic weight factors - Surgical,Diagnosistic weight categories - Surgical,metavision,chartevents,Scores - APACHE II,,Text,
+,row_id,itemid,label,abbreviation,dbsource,linksto,category,unitname,param_type,conceptid,valid
+0,537,580,Previous Weight,,carevue,chartevents,,,,,
+1,538,581,Previous WeightF,,carevue,chartevents,,,,,
+2,2214,4183,Birthweight (kg),,carevue,chartevents,,,,,
+3,682,733,Weight Change,,carevue,chartevents,,,,,
+4,688,763,Daily Weight,,carevue,chartevents,,,,,true
+5,2765,3580,Present Weight  (kg),,carevue,chartevents,,,,,true
+6,2766,3581,Present Weight  (lb),,carevue,chartevents,,,,,true
+7,2767,3582,Present Weight  (oz),,carevue,chartevents,,,,,true
+8,2768,3583,Previous Weight (kg),,carevue,chartevents,,,,,true
+9,2848,3692,Weight Change  (gms),,carevue,chartevents,,,,,
+10,2849,3693,Weight Kg,,carevue,chartevents,,,,,true
+11,2852,3723,Birth Weight    (kg),,carevue,chartevents,,,,,
+12,4467,7000,ideal body weight,,carevue,chartevents,,,,,
+13,14627,226846,Feeding Weight,Feeding Weight,metavision,chartevents,General,kg,Numeric,,
+14,13420,224639,Daily Weight,Daily Weight,metavision,chartevents,General,kg,Numeric,,true
+15,15168,227854,Weight Bearing Status,Weight Bearing Status,metavision,chartevents,OT Notes,,Text,,
+16,14391,226512,Admission Weight (Kg),Admission Weight (Kg),metavision,chartevents,General,kg,Numeric,,
+17,14401,226531,Admission Weight (lbs.),Admission Weight (lbs.),metavision,chartevents,General,None,Numeric,,
+18,13739,225124,Unintentional weight loss >10 lbs.,Unintentional weight loss >10 lbs.,metavision,chartevents,Adm History/FHPA,,Checkbox,,
+19,14501,226740,APACHE II Diagnosistic weight factors - Medical,Diagnostic weight category - Medical,metavision,chartevents,Scores - APACHE II,,Text,,
+20,14502,226741,APACHE II Diagnosistic weight factors - Surgical emergency,Diagnosistic weight categories - Surgical emergenc,metavision,chartevents,Scores - APACHE II,,Text,,
+21,14503,226742,APACHE II Diagnosistic weight factors - Surgical,Diagnosistic weight categories - Surgical,metavision,chartevents,Scores - APACHE II,,Text,,
