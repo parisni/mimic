@@ -1,0 +1,146 @@
+001, Cholera; 002, Typhoid/paraty-
+phoid fever; 003, Other salmonella infec-
+tion; 004, Shigellosis; 005, Other food
+
+poisoning; 008, Intestinal infection not
+
+otherwise classified; 009, Ill-defined in-
+testinal infection; 010, Primary tubercu-
+losis infection; 011, Pulmonary tubercu-
+losis; 012, Other respiratory tuberculosis;
+
+013, Central nervous system tuberculo-
+sis; 014, Intestinal tuberculosis; 015, Tu-
+berculosis of bone and joint; 016, Geni-
+tourinary tuberculosis; 017, Tuberculosis
+
+not otherwise classified; 018, Miliary tu-
+berculosis; 020, Plague; 021, Tularemia;
+
+022, Anthrax; 023, Brucellosis; 024, Glan-
+ders; 025, Melioidosis; 026, Rat-bite fever;
+
+027, Other bacterial zoonoses; 030, Lep-
+rosy; 031, Other mycobacterial disease;
+
+032, Diphtheria; 033, Whooping cough;
+
+034, Streptococcal throat/scarlet fever;
+035, Erysipelas; 036, Meningococcal in-
+fection; 037, Tetanus; 038, Septicemia;
+
+039, Actinomycotic infections; 040, Other
+
+bacterial diseases; 041, Bacterial infection
+
+in other diseases not otherwise specified;
+
+090, Congenital syphilis; 091, Early
+
+symptomatic syphilis; 092, Early syphilis
+
+latent; 093, Cardiovascular syphilis; 094,
+
+Neurosyphilis; 095, Other late symptom-
+atic syphilis; 096, Late syphilis latent;
+
+097, Other and unspecified syphilis; 098,
+
+Gonococcal infections; 100, Leptospiro-
+sis; 101, Vincent’s angina; 102, Yaws; 103,
+
+Pinta; 104, Other spirochetal infection;
+
+110, Dermatophytosis; 111, Dermatomy-
+cosis not otherwise classified or specified;
+
+112, Candidiasis; 114, Coccidioidomyco-
+sis; 115, Histoplasmosis; 116, Blastomy-
+cotic infection; 117, Other mycoses; 118,
+
+Opportunistic mycoses; 320, Bacterial
+
+meningitis; 322, Meningitis, unspecified;
+
+324, Central nervous system abscess; 325,
+
+Phlebitis of intracranial sinus; 420, Acute
+
+pericarditis; 421, Acute or subacute endo-
+carditis; 451, Thrombophlebitis; 461,
+
+Acute sinusitis; 462, Acute pharyngitis;
+
+463, Acute tonsillitis; 464, Acute laryngi-
+tis/tracheitis; 465, Acute upper respira-
+tory infection of multiple sites/not other-
+wise specified; 481, Pneumococcal
+
+pneumonia; 482, Other bacterial pneu-
+monia; 485, Bronchopneumonia with or-
+ganism not otherwise specified; 486,
+
+Pneumonia, organism not otherwise
+
+specified; 491.21, Acute exacerbation of
+
+obstructive chronic bronchitis; 494,
+Bronchiectasis; 510, Empyema; 513,
+
+Lung/mediastinum abscess; 540, Acute
+
+appendicitis; 541, Appendicitis not other-
+wise specified; 542, Other appendicitis;
+
+562.01, Diverticulitis of small intestine
+
+without hemorrhage; 562.03, Diverticuli-
+tis of small intestine with hemorrhage;
+
+562.11, Diverticulitis of colon without
+
+hemorrhage; 562.13, Diverticulitis of co-
+lon with hemorrhage; 566, Anal and rec-
+tal abscess; 567, Peritonitis; 569.5, Intes-
+tinal abscess; 569.83, Perforation of
+
+intestine; 572.0, Abscess of liver; 572.1,
+
+Portal pyemia; 575.0, Acute cholecystitis;
+
+590, Kidney infection; 597, Urethritis/
+
+urethral syndrome; 599.0, Urinary tract
+
+infection not otherwise specified; 601,
+
+Prostatic inflammation; 614, Female pel-
+vic inflammation disease; 615, Uterine in-
+
+flammatory disease; 616, Other female
+
+genital inflammation; 681, Cellulitis, fin-
+ger/toe; 682, Other cellulitis or abscess;
+
+683, Acute lymphadenitis; 686, Other lo-
+cal skin infection; 711.0, Pyogenic arthri-
+tis; 730, Osteomyelitis; 790.7, Bactere-
+mia; 996.6, Infection or inflammation of
+
+device/graft; 998.5, Postoperative infec-
+tion; 999.3, Infectious complication of
+
+medical care not otherwise classified.
+
+Where 3- or 4-digit codes are listed, all
+
+associated subcodes were included. There
+
+were 1,286 distinct infection codes in our
+
+schema. Of these, only 642 codes were de-
+tected in the sample. Among the 642 codes,
+
+225 codes accounted for 99% of the sample
+
+and 68 codes accounted for 90%.
