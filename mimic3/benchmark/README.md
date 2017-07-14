@@ -99,7 +99,7 @@
 = 27 seconds
 
 * Query 2
-= 12 sexonds
+= 12 seconds
 
 * Query 3
 = 23 seconds
@@ -109,6 +109,23 @@
 
 * Query 5
 = 14 seconds
+
+# Apache Hive 2 (ORC format & table * 4 = 1.322.849.932 rows)
+
+* Query 1
+= 32 seconds
+
+* Query 2
+= 21 seconds
+
+* Query 3
+= 28 seconds
+
+* Query 4
+= 30 seconds
+
+* Query 5
+= 25 seconds
 
 # Conclusion
 
@@ -139,7 +156,7 @@ Next step is testing postgresql clustered indexes & (testing JOIN) queries and d
 
 EDIT-2:
 Having:
-- tested on apache hive
+- tested on apache hive (results says hive is able to handle very large table and query < 1 minutes)
 
 Will:
 - activate the HIVE LLAP functionality  (~in memory)
