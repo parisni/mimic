@@ -41,7 +41,7 @@ INSERT INTO ch1_general_vars_glasgow (subject_id, hadm_id, charttime)(
 	SELECT  DISTINCT   ce.subject_id, ce.hadm_id, charttime
     FROM mimiciii.chartevents ce
     WHERE
-		( ce.itemid IN (198) AND ce.valuenum < 12 ) -- glasgow
+		( ce.itemid IN (198) AND ce.valuenum < 13 ) -- glasgow
 );
 DROP TABLE IF EXISTS ch1_general_vars_gly; CREATE TABLE IF NOT EXISTS ch1_general_vars_gly( subject_id integer, hadm_id integer, charttime timestamp);
 INSERT INTO ch1_general_vars_gly (subject_id, hadm_id, charttime)(
@@ -90,7 +90,8 @@ INSERT INTO ch1_general_vars_fluid (subject_id, hadm_id, charttime)(
 
 -- CHAP 2 INFLA VARS
 -- immature form => NO WAY
--- TODO: Procalcitonin is missing ?
+-- TODO: Procalcitonin is missing ? => YES
+-- TODO: ALISATAIR immature band forms from labevents as ITEMID = 51144; WHEN > 10%
 DROP TABLE IF EXISTS ch2_infla_vars_wb; CREATE TABLE IF NOT EXISTS ch2_infla_vars_wb( subject_id integer, hadm_id integer, charttime timestamp);
 INSERT INTO ch2_infla_vars_wb (subject_id, hadm_id, charttime)(
 	SELECT  DISTINCT   ce.subject_id, ce.hadm_id, charttime
@@ -99,6 +100,7 @@ INSERT INTO ch2_infla_vars_wb (subject_id, hadm_id, charttime)(
 	WHERE  
 	( ce.itemid IN ( 1542, 1127, 861, 4200 ) AND ce.valuenum NOT BETWEEN 4000 AND 12000 )  --GENERAL VAR - WHITE BLOOD CELL
 );
+
 DROP TABLE IF EXISTS ch2_infla_vars_crp; CREATE TABLE IF NOT EXISTS ch2_infla_vars_crp( subject_id integer, hadm_id integer, charttime timestamp);
 INSERT INTO ch2_infla_vars_crp (subject_id, hadm_id, charttime)(
 	SELECT  DISTINCT   ce.subject_id, ce.hadm_id, charttime
@@ -146,18 +148,22 @@ INSERT INTO ch3_hemo_vars_card_index (subject_id, hadm_id, charttime)(
 -- CHAP 4 ORGAN DISFONC
 -- paralithiq ileus => NO WAY
 -- TODO: Manage Units problems mmHG, klPascal
+-- TODO: ALISTAIR: fio2 before pao2
 DROP TABLE IF EXISTS ch4_organ_dysf_art_hypox; CREATE TABLE IF NOT EXISTS ch4_organ_dysf_art_hypox ( subject_id integer, hadm_id integer, charttime timestamp);
 INSERT INTO ch4_organ_dysf_art_hypox (subject_id, hadm_id, charttime) (
-	WITH arterialHypox as (
-		SELECT DISTINCT c1.subject_id, c1.hadm_id, c1.charttime
-		FROM mimiciii.chartevents c1, mimiciii.chartevents c2 
-		WHERE c1.icustay_id = c2.icustay_id 
-		AND c1.itemid IN (3837, 3838, 3785) --po2  , 227039 is false
-		AND c2.itemid IN (3420)--fio2 , 227010,227009, 226754, 7570, 2981, 3420 are false 
-		AND c1.charttime - c2.charttime BETWEEN '-10 min'::INTERVAL AND '10 min'::INTERVAL
-		AND (c1.valuenum / (c2.valuenum/100)) < 300 --!! unités : po2 = mmHG (!=klpascal) & fio2 = % (si fraction => )
+WITH 
+		po2 AS (SELECT subject_id, hadm_id, icustay_id, charttime, valuenum FROM mimiciii.chartevents WHERE itemid IN (3837, 3838, 3785) --po2  , 227039 is false
+		),
+		fio2 AS (SELECT subject_id, hadm_id, icustay_id, charttime, valuenum FROM mimiciii.chartevents WHERE itemid IN (3420)-- fio2 , 227010,227009, 226754, 7570, 2981, 3420 are false 
+		),
+	 arterialHypox as (
+		SELECT DISTINCT po2.subject_id, po2.hadm_id, po2.charttime
+		FROM po2 po2
+		JOIN fio2 fio2 USING (icustay_id)
+		WHERE po2.charttime - fio2.charttime BETWEEN '-10 min'::INTERVAL AND '10 min'::INTERVAL
+		AND (po2.valuenum / (fio2.valuenum/100)) < 300 --!! unités : po2 = mmHG (!=klpascal) & fio2 = % (si fraction => )
 	) -- 1121 hadm
-	SELECT DISTINCT subject_id, hadm_id, charttime
+	SELECT *
 	FROM arterialHypox
 );
 
@@ -165,20 +171,21 @@ DROP TABLE IF EXISTS ch4_organ_dysf_creat; CREATE TABLE IF NOT EXISTS ch4_organ_
 -- TODO: variable window on diffetime ch4_organ_dysf_creat -> test
 INSERT INTO ch4_organ_dysf_creat (subject_id, hadm_id, charttime) (
 	WITH ch4_organ_dysf_creat as(--GENERAL VAR : 0.5 or 44
-		WITH    rows AS
-		(
-			SELECT subject_id, hadm_id, icustay_id, valuenum, itemid, charttime, ROW_NUMBER() OVER (ORDER BY subject_id, hadm_id, icustay_id, charttime) AS rn 
-			FROM    mimiciii.chartevents
-			WHERE  itemid IN (791, 1525) --3750, 220615 are removed because value strange & few record
-		),
-		diff AS (
-			SELECT  mc.subject_id, mc.hadm_id, mc.charttime, mc.icustay_id,mp.itemid, mp.valuenum - mc.valuenum   as diffe, mc.valuenum, mp.charttime - mc.charttime   as diffetime, mc.valuenum as w1, mp.valuenum as w2
-			FROM    rows mc
-			JOIN    rows mp
-			ON       mc.icustay_id = mp.icustay_id
-		) 
-		SELECT DISTINCT subject_id, hadm_id, charttime
-		FROM diff WHERE diffe > 0.5 AND diffetime > '0 day'::INTERVAL  --all are mg/dL
+WITH tmp as (SELECT * FROM mimiciii.chartevents 
+	WHERE itemid IN (791, 1525) --3750, 220615 are removed because value strange & few record
+),
+  rows as (                      SELECT subject_id, hadm_id, icustay_id, valuenum, itemid, charttime, ROW_NUMBER() OVER (ORDER BY subject_id, hadm_id, icustay_id, charttime) AS rn
+                        FROM    tmp),
+			
+                diff AS (
+                        SELECT  mc.subject_id, mc.hadm_id, mc.charttime, mc.icustay_id,mp.itemid, mp.valuenum - mc.valuenum   as diffe, mc.valuenum, mp.charttime - mc.charttime   as diffetime, mc.valuenum as w1, mp.valuenum as w2
+                        FROM    rows mc
+                        JOIN    rows mp
+                        ON       mc.icustay_id = mp.icustay_id
+                ),
+                pop as (SELECT DISTINCT subject_id, hadm_id, charttime
+                FROM diff WHERE diffe > 0.3 AND diffetime BETWEEN '0 day' AND  '2 day' )
+	SELECT * FROM pop  --all are mg/dL
 	)
 	SELECT DISTINCT * FROM ch4_organ_dysf_creat
 );-- ch4_organ_dysf_creat | 6695
