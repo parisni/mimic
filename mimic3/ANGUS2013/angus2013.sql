@@ -420,8 +420,8 @@ with
 moment AS (SELECT  array_agg( DISTINCT type) as arr, hadm_id, charttime FROM work_simult_approx GROUP BY hadm_id, charttime),
 nb as (SELECT  distinct hadm_id, arr, charttime FROM moment WHERE arr @> '{1,2,3}'::int[])
 SELECT distinct hadm_id, charttime FROM nb;
-DROP MATERIALIZED VIEW IF EXISTS atb_bact_window_vaso;
 
+DROP MATERIALIZED VIEW IF EXISTS atb_bact_window_vaso;
 CREATE MATERIALIZED VIEW atb_bact_window_vaso AS
 with 
 moment AS (SELECT  array_agg( DISTINCT type) as arr, hadm_id, charttime FROM work_simult_approx GROUP BY hadm_id, charttime),
@@ -447,8 +447,6 @@ JOIN atb_bact_window USING (hadm_id);
 UPDATE angus_deliberation SET type = 2 WHERE hadm_id IN (SELECT hadm_id FROM atb_bact_window_vaso);
 
 --sepsis3 deliberation
-
-
 DROP TABLE IF EXISTS sepsis3_deliberation;
 CREATE TABLE sepsis3_deliberation (hadm_id integer, type integer);
 INSERT INTO sepsis3_deliberation
@@ -458,24 +456,43 @@ WHERE hadm_id IN ( SELECT distinct hadm_id FROM mimiciii.icustays ic LEFT JOIN m
 AND hadm_id IN (SELECT hadm_id FROM atb_bact_window);
 
 UPDATE sepsis3_deliberation SET type = 1 WHERE hadm_id IN (SELECT hadm_id FROM atb_bact_window_lactate) 
-OR hadm_id IN (SELECT hadm_id FROM  mimiciii.admissions WHERE hadm_id NOT IN (SELECT ce.hadm_id FROM mimiciii.chartevents ce WHERE  ce.itemid IN ( 818, 1531, 225668 ) UNION ALL SELECT hadm_id FROM mimiciii.labevents WHERE itemid = 50813) as lact);
+OR hadm_id IN (SELECT hadm_id FROM  mimiciii.admissions LEFT JOIN (SELECT ce.hadm_id FROM mimiciii.chartevents ce WHERE  ce.itemid IN ( 818, 1531, 225668 ) UNION ALL SELECT hadm_id FROM mimiciii.labevents WHERE itemid = 50813) AS tmp USING (hadm_id) WHERE tmp.hadm_id IS NULL);
+
 
 -- EACH GROUP
-DROP TABLE IF EXISTS hadm_deliberation;
-CREATE TABLE hadm_deliberation (
+DROP TABLE IF EXISTS hadm_deliberation_severe;
+CREATE TABLE hadm_deliberation_severe (
 hadm_id integer,
 accp integer,
 angus integer,
 sepsis3 integer
 );
-INSERT INTO hadm_deliberation
+INSERT INTO hadm_deliberation_severe
 WITH 
 accp AS (SELECT distinct hadm_id, 1 as value FROM accp_deliberation WHERE type = 2),
-angus AS (SELECT hadm_id, 1 as value FROM angus_deliberation),
-sepsis3 AS (SELECT hadm_id, 1 as value FROM sepsis3_deliberation)
+angus AS (SELECT hadm_id, 1 as value FROM angus_deliberation WHERE type = 1),
+sepsis3 AS (SELECT hadm_id, 1 as value FROM sepsis3_deliberation WHERE type =1)
 SELECT a.hadm_id, coalesce(accp.value,0), coalesce(angus.value,0), coalesce(sepsis3.value,0)
 FROM mimiciii.admissions a
 LEFT JOIN accp USING (hadm_id)
 LEFT JOIN angus USING (hadm_id)
 LEFT JOIN sepsis3 USING (hadm_id);
 
+
+DROP TABLE IF EXISTS hadm_deliberation_shock;
+CREATE TABLE hadm_deliberation_shock (
+hadm_id integer,
+accp integer,
+angus integer,
+sepsis3 integer
+);
+INSERT INTO hadm_deliberation_shock
+WITH 
+accp AS (SELECT distinct hadm_id, 1 as value FROM accp_deliberation WHERE type = 3),
+angus AS (SELECT hadm_id, 1 as value FROM angus_deliberation WHERE type = 2),
+sepsis3 AS (SELECT hadm_id, 1 as value FROM sepsis3_deliberation WHERE type =2)
+SELECT a.hadm_id, coalesce(accp.value,0), coalesce(angus.value,0), coalesce(sepsis3.value,0)
+FROM mimiciii.admissions a
+LEFT JOIN accp USING (hadm_id)
+LEFT JOIN angus USING (hadm_id)
+LEFT JOIN sepsis3 USING (hadm_id);
