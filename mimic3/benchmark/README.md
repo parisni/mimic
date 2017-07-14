@@ -93,6 +93,23 @@
 * Query 5
 = 14 seconds
 
+# Apache Hive 2 (ORC format)
+
+* Query 1
+= 27 seconds
+
+* Query 2
+= 12 sexonds
+
+* Query 3
+= 23 seconds
+
+* Query 4
+= 24 seconds
+
+* Query 5
+= 14 seconds
+
 # Conclusion
 
 * Not surprisingly, Postgresql partitionned & not partitionned has same results for fetching small amount of rows (query 2). btree Index complexity are O(log(n)).
@@ -118,3 +135,11 @@ Having:
 * Drill partitionned looks like the best overall solution. Unlike the non-partitionned way, it seems that it has got a caching time for the first query (around 1 min). Moreover, the time needeed to build the table is 2 times longer
 
 Next step is testing postgresql clustered indexes & (testing JOIN) queries and drill cluster. (Loading time will be taken in consideration too), as well as table volumetry. An interesting aspect can also be testing many users querying same time.
+
+
+EDIT-2:
+Having:
+- tested on apache hive
+
+Will:
+- activate the HIVE LLAP functionality  (~in memory)
