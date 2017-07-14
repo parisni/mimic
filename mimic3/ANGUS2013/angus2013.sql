@@ -400,8 +400,8 @@ TRUNCATE TABLE work_simult_approx;
 INSERT INTO work_simult_approx 
 WITH lactate as (SELECT ce.hadm_id, charttime, valuenum FROM mimiciii.chartevents ce WHERE  ce.itemid IN ( 818, 1531, 225668 ) UNION ALL SELECT hadm_id, charttime, valuenum FROM mimiciii.labevents WHERE itemid = 50813)
 SELECT DISTINCT hadm_id, date_trunc('hour',startdate), 1 FROM mimiciii.prescriptions WHERE drug ~* '(icill)|(bactam)|(andol)|(cef)|(ceph)|(clavu)|(penem)|(nam)|(lactam)|(amika)|(genta)|(flox)|(amycin)|(omycin)' 
-UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', coalesce(charttime, chartdate+ '12 hour'::INTERVAL)), 2  FROM  mimiciii.microbiologyevents, (SELECT * FROM generate_series(-24,+72) ) AS t
-UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', charttime), 2  FROM  (SELECT hadm_id, charttime FROM mimiciii.labevents WHERE itemid = 51463) as r, (SELECT * FROM generate_series(-24,+72) ) AS t 
+UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', coalesce(charttime, chartdate+ '12 hour'::INTERVAL)) + interval '1h' * generate_series, 2  FROM  mimiciii.microbiologyevents, (SELECT * FROM generate_series(-24,+72) ) AS t
+UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', charttime)+ interval '1h' * generate_series, 2  FROM  (SELECT hadm_id, charttime FROM mimiciii.labevents WHERE itemid = 51463) as r, (SELECT * FROM generate_series(-24,+72) ) AS t 
 UNION ALL SELECT hadm_id, date_trunc('hour', charttime), 3 FROM lactate WHERE  valuenum < 2
 UNION ALL SELECT hadm_id, date_trunc('hour', starttime), 4 FROM (SELECT hadm_id, starttime FROM mimiciii.mp_norepinephrine JOIN mimiciii.icustays USING (icustay_id) UNION ALL SELECT hadm_id, starttime FROM mimiciii.mp_epinephrine JOIN mimiciii.icustays USING (icustay_id)) as vaso;
 
