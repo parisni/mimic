@@ -398,11 +398,11 @@ GROUP BY hadm_id;
 --ANTIBIO & BACT in same window
 TRUNCATE TABLE work_simult_approx;
 INSERT INTO work_simult_approx 
+WITH lactate as (SELECT ce.hadm_id, charttime, valuenum FROM mimiciii.chartevents ce WHERE  ce.itemid IN ( 818, 1531, 225668 ) UNION ALL SELECT hadm_id, charttime, valuenum FROM mimiciii.labevents WHERE itemid = 50813)
 SELECT DISTINCT hadm_id, date_trunc('hour',startdate), 1 FROM mimiciii.prescriptions WHERE drug ~* '(icill)|(bactam)|(andol)|(cef)|(ceph)|(clavu)|(penem)|(nam)|(lactam)|(amika)|(genta)|(flox)|(amycin)|(omycin)' 
 UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', coalesce(charttime, chartdate+ '12 hour'::INTERVAL)), 2  FROM  mimiciii.microbiologyevents, (SELECT * FROM generate_series(-24,+72) ) AS t
 UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', charttime), 2  FROM  (SELECT hadm_id, charttime FROM mimiciii.labevents WHERE itemid = 51463) as r, (SELECT * FROM generate_series(-24,+72) ) AS t 
-UNION ALL SELECT  DISTINCT  ce.hadm_id, date_trunc('hour', charttime), 3 FROM mimiciii.chartevents ce WHERE ( ce.itemid IN ( 818, 1531, 225668 ) AND ce.valuenum < 2 ) -- lactate  unité  mmmol/L ! 
-UNION ALL SELECT hadm_id, date_trunc('hour', charttime), 3 FROM mimiciii.labevents WHERE itemid = 50813 AND valuenum < 2
+UNION ALL SELECT hadm_id, date_trunc('hour', charttime), 3 FROM lactate WHERE  valuenum < 2
 UNION ALL SELECT hadm_id, date_trunc('hour', starttime), 4 FROM (SELECT hadm_id, starttime FROM mimiciii.mp_norepinephrine JOIN mimiciii.icustays USING (icustay_id) UNION ALL SELECT hadm_id, starttime FROM mimiciii.mp_epinephrine JOIN mimiciii.icustays USING (icustay_id)) as vaso;
 
 
@@ -421,6 +421,7 @@ moment AS (SELECT  array_agg( DISTINCT type) as arr, hadm_id, charttime FROM wor
 nb as (SELECT  distinct hadm_id, arr, charttime FROM moment WHERE arr @> '{1,2,3}'::int[])
 SELECT distinct hadm_id, charttime FROM nb;
 DROP MATERIALIZED VIEW IF EXISTS atb_bact_window_vaso;
+
 CREATE MATERIALIZED VIEW atb_bact_window_vaso AS
 with 
 moment AS (SELECT  array_agg( DISTINCT type) as arr, hadm_id, charttime FROM work_simult_approx GROUP BY hadm_id, charttime),
@@ -451,11 +452,13 @@ UPDATE angus_deliberation SET type = 2 WHERE hadm_id IN (SELECT hadm_id FROM atb
 DROP TABLE IF EXISTS sepsis3_deliberation;
 CREATE TABLE sepsis3_deliberation (hadm_id integer, type integer);
 INSERT INTO sepsis3_deliberation
-SELECT distinct hadm_id, 1
+SELECT distinct hadm_id, 2
 FROM ch0_infection_pop
 WHERE hadm_id IN ( SELECT distinct hadm_id FROM mimiciii.icustays ic LEFT JOIN mimiciii.mp_sofa so USING (icustay_id) WHERE sofa_24hours >= 2 )
 AND hadm_id IN (SELECT hadm_id FROM atb_bact_window);
-UPDATE sepsis3_deliberation SET type = 2 WHERE hadm_id IN (SELECT hadm_id FROM atb_bact_window_lactate);
+
+UPDATE sepsis3_deliberation SET type = 1 WHERE hadm_id IN (SELECT hadm_id FROM atb_bact_window_lactate) 
+OR hadm_id IN (SELECT hadm_id FROM  mimiciii.admissions WHERE hadm_id NOT IN (SELECT ce.hadm_id FROM mimiciii.chartevents ce WHERE  ce.itemid IN ( 818, 1531, 225668 ) UNION ALL SELECT hadm_id FROM mimiciii.labevents WHERE itemid = 50813) as lact);
 
 -- EACH GROUP
 DROP TABLE IF EXISTS hadm_deliberation;
