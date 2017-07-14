@@ -395,11 +395,43 @@ SELECT hadm_id, max(type) as type
 FROM tmp
 GROUP BY hadm_id;
 
+--ANTIBIO & BACT in same window
+TRUNCATE TABLE work_simult_approx;
+INSERT INTO work_simult_approx 
+SELECT DISTINCT hadm_id, date_trunc('hour',startdate), 1 FROM mimiciii.prescriptions WHERE drug ~* '(icill)|(bactam)|(andol)|(cef)|(ceph)|(clavu)|(penem)|(nam)|(lactam)|(amika)|(genta)|(flox)|(amycin)|(omycin)' 
+UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', coalesce(charttime, chartdate+ '12 hour'::INTERVAL)), 2  FROM  mimiciii.microbiologyevents, (SELECT * FROM generate_series(-24,+72) ) AS t
+UNION ALL SELECT DISTINCT hadm_id, date_trunc('hour', charttime), 2  FROM  (SELECT hadm_id, charttime FROM mimiciii.labevents WHERE itemid = 51463) as r, (SELECT * FROM generate_series(-24,+72) ) AS t 
+UNION ALL SELECT  DISTINCT  ce.hadm_id, date_trunc('hour', charttime), 3 FROM mimiciii.chartevents ce WHERE ( ce.itemid IN ( 818, 1531, 225668 ) AND ce.valuenum < 2 ) -- lactate  unité  mmmol/L ! 
+UNION ALL SELECT hadm_id, date_trunc('hour', charttime), 3 FROM mimiciii.labevents WHERE itemid = 50813 AND valuenum < 2
+UNION ALL SELECT hadm_id, date_trunc('hour', starttime), 4 FROM (SELECT hadm_id, starttime FROM mimiciii.mp_norepinephrine JOIN mimiciii.icustays USING (icustay_id) UNION ALL SELECT hadm_id, starttime FROM mimiciii.mp_epinephrine JOIN mimiciii.icustays USING (icustay_id)) as vaso;
 
+
+
+DROP MATERIALIZED VIEW IF EXISTS atb_bact_window;
+CREATE MATERIALIZED VIEW atb_bact_window AS
+with 
+moment AS (SELECT  array_agg( DISTINCT type) as arr, hadm_id, charttime FROM work_simult_approx GROUP BY hadm_id, charttime),
+nb as (SELECT  distinct hadm_id, arr, charttime FROM moment WHERE arr @> '{1,2}'::int[])
+SELECT distinct hadm_id, charttime FROM nb;
+
+DROP MATERIALIZED VIEW IF EXISTS atb_bact_window_lactate;
+CREATE MATERIALIZED VIEW atb_bact_window_lactate AS
+with 
+moment AS (SELECT  array_agg( DISTINCT type) as arr, hadm_id, charttime FROM work_simult_approx GROUP BY hadm_id, charttime),
+nb as (SELECT  distinct hadm_id, arr, charttime FROM moment WHERE arr @> '{1,2,3}'::int[])
+SELECT distinct hadm_id, charttime FROM nb;
+DROP MATERIALIZED VIEW IF EXISTS atb_bact_window_vaso;
+CREATE MATERIALIZED VIEW atb_bact_window_vaso AS
+with 
+moment AS (SELECT  array_agg( DISTINCT type) as arr, hadm_id, charttime FROM work_simult_approx GROUP BY hadm_id, charttime),
+nb as (SELECT  distinct hadm_id, arr, charttime FROM moment WHERE arr @> '{1,2,4}'::int[])
+SELECT distinct hadm_id, charttime FROM nb;
+
+-- ANGUS DELIB
 DROP TABLE IF EXISTS angus_deliberation;
-CREATE TABLE angus_deliberation (hadm_id integer);
+CREATE TABLE angus_deliberation (hadm_id integer, type integer);
 INSERT INTO angus_deliberation
-SELECT distinct hadm_id 
+SELECT distinct hadm_id, 1
 FROM 
 (
 SELECT distinct hadm_id 
@@ -409,19 +441,21 @@ INTERSECT
 SELECT distinct hadm_id
 FROM mimiciii.diagnoses_icd
 WHERE icd9_code ~ '^785.5|^458|^96.7|^348.3|^293|^348.1|^287.4|^287.5|^286.9|^286.6|^570|^573.4|^584'
-) as tmp;
+) as tmp
+JOIN atb_bact_window USING (hadm_id);
+UPDATE angus_deliberation SET type = 2 WHERE hadm_id IN (SELECT hadm_id FROM atb_bact_window_vaso);
 
 --sepsis3 deliberation
+
+
 DROP TABLE IF EXISTS sepsis3_deliberation;
-CREATE TABLE sepsis3_deliberation (hadm_id integer);
+CREATE TABLE sepsis3_deliberation (hadm_id integer, type integer);
 INSERT INTO sepsis3_deliberation
-SELECT distinct hadm_id
+SELECT distinct hadm_id, 1
 FROM ch0_infection_pop
-WHERE hadm_id IN (
-SELECT distinct hadm_id 
-FROM mimiciii.icustays ic
-LEFT JOIN mimiciii.mp_sofa so USING (icustay_id)
-WHERE sofa_24hours >= 2 );
+WHERE hadm_id IN ( SELECT distinct hadm_id FROM mimiciii.icustays ic LEFT JOIN mimiciii.mp_sofa so USING (icustay_id) WHERE sofa_24hours >= 2 )
+AND hadm_id IN (SELECT hadm_id FROM atb_bact_window);
+UPDATE sepsis3_deliberation SET type = 2 WHERE hadm_id IN (SELECT hadm_id FROM atb_bact_window_lactate);
 
 -- EACH GROUP
 DROP TABLE IF EXISTS hadm_deliberation;
